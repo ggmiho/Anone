@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Surat Cinta Ulang Tahun</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: black;
+    }
+
+    .envelope-screen {
+      background: linear-gradient(to bottom right, #000000, #1a1a1a);
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+    }
+
+    .envelope-icon {
+      font-size: 5rem;
+      cursor: pointer;
+      animation: pulse 1.5s infinite;
+    }
+
+    .instruction {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      padding: 0 20px;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    #video-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -2;
+      display: none;
+    }
+
+    .overlay {
+      background: rgba(0,0,0,0.4);
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      display: none;
+    }
+
+    .content {
+      display: none;
+      z-index: 1;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 3s ease-in-out;
+    }
+
+    .content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .content p {
+      font-size: 1.2rem;
+      max-width: 800px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+  <div class="envelope-screen" id="envelopeScreen">
+    <div class="envelope-icon" id="openBtn">💌</div>
+    <div class="instruction">Klik love-nya, ada sesuatu untukmu</div>
+  </div>
+
+  <video id="video-bg" muted loop playsinline>
+    <source src="background.mp4" type="video/mp4" />
+    Browsermu tidak mendukung video.
+  </video>
+
+  <div class="overlay" id="videoOverlay"></div>
+
+  <div class="content" id="mainContent">
+    <h1>A & Y</h1>
+    <p>Selamat ulang tahun suamiku yang baik dan lembut hatinya. Semoga apa yang kita upayakan diperlancar, diberi kemudahan dan disegerakan. Semoga diberi umur panjang dan bermanfaat serta dijadikan sebaik-baiknya pemimpin — dalam rumah tangga serta pasangan yang baik dan saling membangun. Terima kasih sudah berjuang bersama di kala suka dan duka. Love, aku dan Toyek 🌻.</p>
+  </div>
+
+  <audio id="bgMusic">
+    <source src="sinarengan.mp3" type="audio/mpeg" />
+    Browsermu tidak mendukung audio.
+  </audio>
+
+  <canvas id="starCanvas"></canvas>
+
+  <script>
+    const openBtn = document.getElementById('openBtn');
+    const envelopeScreen = document.getElementById('envelopeScreen');
+    const video = document.getElementById('video-bg');
+    const music = document.getElementById('bgMusic');
+    const content = document.getElementById('mainContent');
+    const overlay = document.getElementById('videoOverlay');
+
+    openBtn.addEventListener('click', () => {
+      envelopeScreen.style.display = 'none';
+      video.style.display = 'block';
+      overlay.style.display = 'block';
+      content.style.display = 'flex';
+
+      video.play();
+      music.play();
+    });
+
+    // Star effect
+    const canvas = document.getElementById('starCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function drawStar(x, y) {
+      let radius = 1;
+      const grow = setInterval(() => {
+        ctx.clearRect(x - 10, y - 10, 20, 20);
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = "white";
+        ctx.fill();
+        radius += 1;
+        if (radius > 6) {
+          clearInterval(grow);
+          setTimeout(() => {
+            ctx.clearRect(x - 10, y - 10, 20, 20);
+          }, 100);
+        }
+      }, 20);
+    }
+
+    window.addEventListener('click', (e) => {
+      drawStar(e.clientX, e.clientY);
+    });
+
+    window.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      drawStar(touch.clientX, touch.clientY);
+    });
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
